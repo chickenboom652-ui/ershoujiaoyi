@@ -3,7 +3,7 @@
 // 真实部署请删除本文件，使用 server/ 的 Express API。
 (() => {
   const KEY = 'qingji-demo-state-v1';
-  const svgUri = a => `<svg xmlns="http://www.w3.org/2000/svg" width="500" height="440"><rect width="500" height="440" fill="${a.bg}"/><ellipse cx="250" cy="375" rx="145" ry="15" fill="#000" opacity=".04"/>${a.art}</svg>`;
+  const svgUri = a => `<svg xmlns="http://www.w3.org/2000/svg" width="500" height="440"><rect width="500" height="440" fill="${a[1]}"/><ellipse cx="250" cy="375" rx="145" ry="15" fill="#000" opacity=".04"/>${a[2]}</svg>`;
   const art = [
     ['教材书籍', '#e7edde', '<rect x="130" y="100" width="180" height="235" rx="8" fill="#457263" transform="rotate(-10 220 220)"/><rect x="190" y="120" width="170" height="225" rx="8" fill="#f6f0d8" transform="rotate(8 260 230)"/><path d="M215 180h115M215 195h80M215 265h100M215 280h100" stroke="#759187" stroke-width="8"/>'],
     ['数码电子', '#e5ede9', '<rect x="112" y="160" width="275" height="175" rx="28" fill="#e9e5d8"/><path d="M180 160l20-35h100l20 35" fill="#454d48"/><circle cx="250" cy="245" r="70" fill="#384d48"/><circle cx="250" cy="245" r="48" fill="#6c9690"/><circle cx="250" cy="245" r="25" fill="#263c3b"/><rect x="135" y="181" width="44" height="20" rx="4" fill="#6c9690"/>'],
@@ -25,7 +25,6 @@
     if (!blobCache.has(i)) blobCache.set(i, URL.createObjectURL(new Blob([svgUri(art[i])], { type: 'image/svg+xml' })));
     return blobCache.get(i);
   };
-
   function seedState() {
     return {
       seq: 0, sessions: {}, adminSession: null,
