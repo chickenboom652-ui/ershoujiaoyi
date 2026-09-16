@@ -2,6 +2,12 @@
 
 单校校园闲置信息发布平台：免费发布、分类搜索、收藏，双方自行联系线下交易。价格直接展示卖家填写的单价，无 5% 加价、无支付、无佣金。
 
+## 在线演示（无需安装）
+- 合集演示站：<https://chickenboom652-ui.github.io/ershoujiaoyi/>（集市前台、审核后台、使用须知）
+- 单文件版：[web/demo.html](web/demo.html) —— 一个 HTML 文件包含全部界面与演示数据，双击即可离线打开；也可访问 <https://chickenboom652-ui.github.io/ershoujiaoyi/demo.html>
+
+两者都是纯前端演示：界面与真实版本一致，但数据来自内置演示种子并保存在浏览器 localStorage（发布、收藏、审核结果只存在本机，刷新仍在，可点顶栏「重置演示数据」还原）。管理员演示密码 `demo-admin-2026`。需要真实后端（SQLite、图片压缩、微信登录）请按下文本机启动或部署章节运行 `server/`。
+
 ## 已实现
 - 原生微信小程序：首页、发布/编辑、详情、我的发布、我的收藏、登录、使用须知。
 - 商品多图上传、名称、简介、分类、数量、价格、自取/送达；自取地点必填。
@@ -29,7 +35,7 @@ npm.cmd run dev
 ## 项目目录
 ```
 server/        Express API、SQLite、演示种子
-web/           浏览器前台、管理员后台
+web/           浏览器前台、管理员后台、单文件演示 demo.html
 miniprogram/   原生微信小程序
 tests/         API 和小程序逻辑测试、浏览器端到端测试
 scripts/       验证与备份工具
