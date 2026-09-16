@@ -150,3 +150,38 @@ test('收藏与发布联动：首页、照片、搜索及收藏详情保持一�
   await expect(page.locator('.detail-facts')).toContainText('校门口');
   expect(errors).toEqual([]);
 });
+
+
+test('照片上传区：顺序追加、六张上限、删除恢复与手机换行', async ({ page }) => {
+  await page.setViewportSize({width:390,height:844});
+  await page.goto(url);
+  await page.locator('.nav-item[data-go=publish]').click();
+  const input=page.locator('#photo-file-input');
+  await expect(input).toBeHidden();
+  const photo=i=>({name:'photo'+i+'.png',mimeType:'image/png',buffer:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aM1sAAAAASUVORK5CYII=','base64')});
+  const chooser=page.waitForEvent('filechooser');await page.locator('.photo-add').click();await (await chooser).setFiles(photo(1));
+  await expect(page.locator('.photo-tile')).toHaveCount(1);
+  const original=await page.locator('.photo-tile img').first().getAttribute('src');
+  const first=await page.locator('.photo-tile').boundingBox(),add=await page.locator('.photo-add').boundingBox();
+  expect(add.x).toBeGreaterThan(first.x);expect(add.y).toBe(first.y);
+  await input.setInputFiles([photo(2),photo(3)]);
+  await expect(page.locator('.photo-tile')).toHaveCount(3);
+  expect((await page.locator('.photo-add').boundingBox()).y).toBeGreaterThan(first.y);
+  await expect(page.locator('.photo-tile img').first()).toHaveAttribute('src',original);
+  await input.setInputFiles([photo(4),photo(5),photo(6),photo(7)]);
+  await expect(page.locator('.photo-tile')).toHaveCount(6);
+  await expect(page.locator('.photo-add')).toHaveCount(0);
+  await expect(page.locator('#photo-count')).toHaveText('6 / 6 张');
+  await page.getByRole('button',{name:'删除第 2 张照片'}).click();
+  await expect(page.locator('.photo-tile')).toHaveCount(5);
+  await expect(page.locator('#local-photos > :last-child')).toHaveClass('photo-add');
+  await input.setInputFiles(photo(2));await expect(page.locator('.photo-tile')).toHaveCount(6);
+  for(const width of [320,375,390,430]){
+    await page.setViewportSize({width,height:844});
+    const area=await page.locator('.photo-upload-area').boundingBox();
+    for(const tile of await page.locator('.photo-tile').all()){const box=await tile.boundingBox();expect(box.x).toBeGreaterThanOrEqual(area.x);expect(box.x+box.width).toBeLessThanOrEqual(area.x+area.width);}
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
+  }
+  for(let i=0;i<6;i++)await page.getByRole('button',{name:'删除第 1 张照片'}).click();
+  await expect(page.locator('#photo-count')).toHaveText('0 / 6 张');await expect(page.locator('.photo-add')).toBeVisible();
+});
