@@ -3,11 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=24.0.0" },
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "scripts": {
     "dev": "node --env-file-if-exists=.env server/index.js --demo",
     "start": "node --env-file-if-exists=.env server/index.js",
     "test": "node --test --test-concurrency=1 tests/*.test.js",
     "check": "node scripts/check.js && npm test"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.7.0",
+    "helmet": "^8.3.0",
+    "multer": "^2.4.0",
+    "sharp": "^0.35.4"
   }
 }
