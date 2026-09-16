@@ -1,0 +1,7 @@
+{
+  "pages": ["pages/home/home", "pages/publish/publish", "pages/detail/detail", "pages/mine/mine", "pages/favorites/favorites", "pages/login/login", "pages/policy/policy"],
+  "window": { "navigationBarTitleText": "青集 · 校园闲置", "navigationBarBackgroundColor": "#f4f7ee", "navigationBarTextStyle": "black", "backgroundColor": "#f8f9f5" },
+  "tabBar": { "color": "#87927e", "selectedColor": "#285845", "backgroundColor": "#f4f7ee", "list": [{ "pagePath": "pages/home/home", "text": "逛逛闲置" }, { "pagePath": "pages/favorites/favorites", "text": "我的收藏" }, { "pagePath": "pages/mine/mine", "text": "我的发布" }] },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

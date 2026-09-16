@@ -1,0 +1,1 @@
+.facts{display:flex;gap:12rpx;flex-wrap:wrap;margin:25rpx 0 35rpx}.notice{margin-top:30rpx;line-height:1.8}

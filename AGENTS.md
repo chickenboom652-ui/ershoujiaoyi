@@ -7,7 +7,7 @@
 ## 项目验证命令
 - 安装依赖：`npm ci`
 - 相关测试：`npm test`
-- 完整验证：`npm run check`（JavaScript 语法检查、小程序文件检查、API 集成测试）
+- 完整验证：`npm run check`（JavaScript 语法检查、小程序文件检查、API / 小程序逻辑测试）；界面变更另运行 `npm run test:e2e`，本机可设置 PLAYWRIGHT_CHANNEL=msedge。
 - 本地演示：`npm run dev`，只监听 127.0.0.1，禁止部署演示登录到公网。
 
 ## 产品边界

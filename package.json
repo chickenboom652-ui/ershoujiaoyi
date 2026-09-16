@@ -10,7 +10,9 @@
     "dev": "node --env-file-if-exists=.env server/index.js --demo",
     "start": "node --env-file-if-exists=.env server/index.js",
     "test": "node --test --test-concurrency=1 tests/*.test.js",
-    "check": "node scripts/check.js && npm test"
+    "check": "node scripts/check.js && npm test",
+    "test:e2e": "playwright test",
+    "backup": "node --env-file-if-exists=.env scripts/backup.js"
   },
   "dependencies": {
     "express": "^5.2.1",
@@ -18,5 +20,8 @@
     "helmet": "^8.3.0",
     "multer": "^2.4.0",
     "sharp": "^0.35.4"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
   }
 }
