@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#244f41"><title>青集 · 校园闲置（在线演示）</title><link rel="icon" href="data:,"><link rel="stylesheet" href="style.css"><script src="mock-api.js" defer></script><script src="app.js" defer defer></script></head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="#home"><span class="brand-mark">青</span><span>青集<small>CAMPUS MARKET</small></span></a>
+    <div class="school-pill"><span class="live-dot"></span><span id="school">校园闲置</span><span class="school-caption">单校试运营</span></div>
+    <p class="nav-label">发现校园里的好东西</p>
+    <nav aria-label="主要导航">
+      <a href="#home" data-nav="home"><span>▦</span>逛逛闲置</a>
+      <a href="#favorites" data-nav="favorites"><span>♡</span>我的收藏</a>
+      <a href="#mine" data-nav="mine"><span>▤</span>我的发布</a>
+    </nav>
+    <div class="sidebar-note"><span class="leaf">↗</span><h3>闲置换个主人，<br>故事继续发生。</h3><p>从你的书桌，<br>到另一位同学的日常。</p></div>
+    <div class="sidebar-bottom"><button id="user-button" class="user-button"><span class="avatar">同</span><span id="user-name">登录校园账号</span><span>→</span></button><a href="policy.html">使用须知与隐私说明</a></div>
+  </aside>
+  <main>
+    <header class="topbar"><div><span class="breadcrumb">校园生活</span><span class="slash">/</span><span id="page-label">闲置集市</span></div><div class="top-actions"><span class="offline-label">同校发现 · 线下交换</span><button class="primary" id="publish-button"><b>＋</b> 发布闲置</button></div></header>
+    <div id="demo-banner" class="demo-banner" hidden>在线演示版 · 商品为演示数据，非真实在售物品；你的发布和收藏仅保存在当前浏览器里。<a href="admin.html" target="_blank" rel="noopener">打开审核后台 ↗</a><a href="https://github.com/chickenboom652-ui/ershoujiaoyi" target="_blank" rel="noopener">GitHub 源码 ↗</a><a href="javascript:void(0)" onclick="localStorage.removeItem('qingji-demo-state-v1');localStorage.removeItem('campus-token');location.reload()">重置演示数据</a></div>
+    <section id="home-intro" class="hero"><div class="hero-copy"><span class="eyebrow">给闲置一次新的出发</span><h1>你的闲置，<br>恰好是我的<span>心头好。</span></h1><p>让好物在校园里流动，让每一份喜欢都有回响。</p><div class="hero-tags"><span>✦ 免费发布</span><span>↔ 当面交易</span><span>♡ 循环使用</span></div></div><div class="hero-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="art-note note-one">GOOD FINDS<br><b>好物，不闲置。</b></div><div class="book book-back"></div><div class="book book-front"><span>THE<br>SECOND<br>CHAPTER</span><i>每一次转手<br>都是新一页</i><b>↗</b></div><div class="flower">✳</div><span class="art-note note-two">在校园，遇见刚刚好</span></div></section>
+    <section class="market-section"><div class="section-heading"><div><span class="eyebrow" id="section-eyebrow">THE CAMPUS EDIT</span><h2 id="section-title">发现校园好物 <span id="item-count"></span></h2></div><form id="search-form" class="search-form"><span aria-hidden="true">⌕</span><input id="search" aria-label="搜索商品" placeholder="搜一搜，发现你的心头好" maxlength="80"><button type="submit">搜索</button></form></div>
+      <div class="filter-row" id="filter-row"><div class="categories" id="categories"></div><span class="sort-label">↓ 最新发布</span></div>
+      <div id="feed" class="product-grid" aria-live="polite"></div><button id="load-more" class="secondary load-more" hidden>查看更多好物</button>
+    </section>
+    <footer class="page-footer"><span>青集 · 让校园里的好物继续被喜欢</span><span>不收佣金 · 双方自行联系交易</span></footer>
+  </main>
+  <dialog id="dialog"><button class="close-dialog" aria-label="关闭">×</button><div id="dialog-body"></div></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body></html>
