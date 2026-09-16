@@ -109,6 +109,7 @@ test('收藏与发布联动：首页、照片、搜索及收藏详情保持一�
   const errors=[];page.on('pageerror',error=>errors.push(error.message));
   await page.goto(url);
   await expect(page.locator('.brand')).toHaveText('盒闲');
+  await expect(page.locator('.profile h2')).toHaveText('你好，同学');
   await page.locator('.nav-item[data-go=mine]').click();
   await page.locator('[data-my=favorites]').click();
   await expect(page.locator('[data-products=my] .empty')).toContainText('还没有收藏');
