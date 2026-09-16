@@ -1,0 +1,13 @@
+{
+  "name": "campus-market",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24.0.0" },
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env server/index.js --demo",
+    "start": "node --env-file-if-exists=.env server/index.js",
+    "test": "node --test --test-concurrency=1 tests/*.test.js",
+    "check": "node scripts/check.js && npm test"
+  }
+}
