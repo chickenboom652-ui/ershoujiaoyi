@@ -1,0 +1,11 @@
+node_modules
+.git
+.env
+.env.*
+data
+uploads
+test-results
+playwright-report
+tests
+miniprogram
+*.log
