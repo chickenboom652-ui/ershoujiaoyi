@@ -18,8 +18,10 @@ test('手机原型：卡片、搜索详情和收藏互不干扰', async ({ page 
     await expect(dialog.locator('.detail-facts')).toContainText('数量');
     await expect(dialog.locator('.detail-facts')).toContainText('自取地点');
     await dialog.getByRole('button', { name: '我想要 · 联系卖家' }).click();
-    await expect(dialog.locator('.contact-preview')).toContainText('不能联系真实卖家');
-    await dialog.locator('[data-close]').first().click();
+    await expect(page.locator('[data-page=chat]')).toBeVisible();
+    await expect(page.locator('#chat-product-title')).toHaveText(title);
+    await expect(page.locator('.nav-item[data-go=messages]')).toHaveAttribute('aria-current', 'page');
+    await page.locator('.nav-item[data-go=home]').click();
   }
   await cards.first().locator('.heart').click();
   await expect(dialog).not.toBeVisible();
@@ -59,4 +61,44 @@ test('手机原型：五秒轮播循环与暂停', async ({ page }) => {
   await page.locator('.carousel-pause').click();
   await page.clock.runFor(6000);
   await expect(carousel).toHaveAttribute('data-slide', '0');
+});
+
+
+test('发布后我的发布展示真实填写内容，对话按卖家保存', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(url);
+  await page.locator('.nav-item[data-go=publish]').click();
+  const form=page.locator('#publish-prototype');
+  await form.locator('[name=title]').fill('我的测试笔记本');
+  await form.locator('[name=description]').fill('只写了三页，剩余空白');
+  await form.locator('[name=price]').fill('12.50');
+  await form.locator('[name=quantity]').fill('2');
+  await form.locator('[name=location]').fill('图书馆门口');
+  await form.locator('button[type=submit],button.primary').click();
+  await expect(page.locator('#my-title')).toHaveText('我发布的');
+  const card=page.locator('[data-products=my] .product');
+  await expect(card).toHaveCount(1);
+  await expect(card).toContainText('我的测试笔记本');
+  await expect(card.locator('.price')).toHaveText('¥12.50');
+  await card.locator('h3').click();
+  await expect(page.locator('.detail-description')).toHaveText('只写了三页，剩余空白');
+  await expect(page.locator('.detail-facts')).toContainText('2 件');
+  await expect(page.locator('.detail-facts')).toContainText('图书馆门口');
+  await page.locator('#info-dialog [data-close]').first().click();
+  await page.locator('.nav-item[data-go=home]').click();
+  await page.locator('[data-products=home] .product h3').first().click();
+  await page.getByRole('button',{name:'我想要 · 联系卖家'}).click();
+  await expect(page.locator('#chat-seller')).toHaveText('小林同学');
+  await page.getByRole('textbox',{name:'输入消息'}).fill('你好，请问还在吗？');
+  await page.locator('#chat-form button').click();
+  await expect(page.locator('.chat-bubble')).toHaveText('你好，请问还在吗？');
+  await page.locator('.nav-item[data-go=messages]').click();
+  await expect(page.locator('#conversation-list')).toContainText('你好，请问还在吗？');
+  await page.locator('#conversation-list button').click();
+  await expect(page.locator('.chat-bubble')).toHaveCount(1);
+  await page.locator('.nav-item[data-go=home]').click();
+  await page.locator('[data-products=home] .product h3').nth(1).click();
+  await page.getByRole('button',{name:'我想要 · 联系卖家'}).click();
+  await expect(page.locator('#chat-seller')).toHaveText('小陈同学');
+  await expect(page.locator('.chat-bubble')).toHaveCount(0);
 });
