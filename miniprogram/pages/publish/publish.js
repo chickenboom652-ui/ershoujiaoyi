@@ -11,11 +11,11 @@ Page({
   consent(e) { this.setData({ consent: e.detail.value.includes('yes') }); },
   removePhoto(e) { if (this.data.uploading || this.data.busy) return; const photos = this.data.photos.slice(); photos.splice(e.currentTarget.dataset.index, 1); this.setData({ photos }); },
   async addPhoto() {
-    if (this.data.uploading || this.data.busy) return;
+    if (this.data.uploading || this.data.busy || this.data.photos.length >= 6) return;
     try {
       const result = await new Promise((resolve, reject) => wx.chooseMedia({ count: 6 - this.data.photos.length, mediaType: ['image'], sizeType: ['compressed'], sourceType: ['album', 'camera'], success: resolve, fail: reject }));
       this.setData({ uploading: true });
-      for (const file of result.tempFiles) { if (file.size > 8 * 1024 * 1024) throw new Error('每张照片不能超过 8MB'); const photo = await api.upload(file.tempFilePath); this.setData({ photos: this.data.photos.concat(photo) }); }
+      for (const file of result.tempFiles.slice(0, 6 - this.data.photos.length)) { if (file.size > 8 * 1024 * 1024) throw new Error('每张照片不能超过 8MB'); const photo = await api.upload(file.tempFilePath); this.setData({ photos: this.data.photos.concat(photo) }); }
     } catch (error) { if (!String(error.errMsg || '').includes('cancel')) api.error(error); }
     finally { this.setData({ uploading: false }); }
   },

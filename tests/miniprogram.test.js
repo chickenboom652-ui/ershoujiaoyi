@@ -42,3 +42,23 @@ test('小程序登录必须先同意说明，演示身份不冒充微信登录',
   await page.login(event); assert.equal(calls, 0); assert.equal(errors.length, 1);
   page.data.consent = true; await page.login(event); assert.equal(calls, 1); assert.equal(storage.get('token'), 'session-token'); assert.equal(page.data.busy, false);
 });
+
+
+test('小程序顶部输入立即检索并取消收起，导航连接真实页面', async () => {
+  const calls=[];
+  const home=loadPage('home',{request:async url=>{calls.push(url);return {items:[{id:'match'}],hasMore:false};},product:p=>p,error:e=>{throw e;}});
+  await home.inputSearch({detail:{value:'台灯'}});
+  assert.equal(home.data.searching,true);assert.ok(calls[0].includes(encodeURIComponent('台灯')));assert.equal(home.data.items[0].id,'match');
+  home.closeSearch();assert.equal(home.data.searching,false);assert.equal(home.data.query,'');
+  const config=JSON.parse(readFileSync('miniprogram/app.json','utf8'));assert.equal(config.tabBar.custom,true);
+  for(const tab of config.tabBar.list)assert.ok(config.pages.includes(tab.pagePath));
+  let component;const destinations=[];
+  vm.runInNewContext(readFileSync('miniprogram/custom-tab-bar/index.js','utf8'),{Component:value=>component=value,wx:{getStorageSync:()=> 'test-token',navigateTo:o=>destinations.push(o.url),switchTab:o=>destinations.push(o.url)}});
+  for(const page of ['publish','home','mine','lost','messages'])component.methods.navigate({currentTarget:{dataset:{page}}});
+  assert.deepEqual(destinations,['/pages/publish/publish','/pages/home/home','/pages/mine/mine','/pages/lost/lost','/pages/messages/messages']);
+});
+
+test('小程序六张照片时禁止继续选图', async () => {
+  const page=loadPage('publish',{}, {chooseMedia(){throw new Error('不应继续打开选择器');}});
+  page.data.photos=Array.from({length:6},(_,id)=>({id}));await page.addPhoto();assert.equal(page.data.photos.length,6);
+});

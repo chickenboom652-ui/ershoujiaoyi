@@ -1,8 +1,10 @@
 const api = require('../../utils/api');
 Page({
-  data: { user: null, items: [], loading: false, error: '', busy: false },
-  onShow() { this.setData({ user: wx.getStorageSync('user') || null }); if (wx.getStorageSync('token')) this.load(); else this.setData({ items: [] }); },
+  data: { viewingPublished: false, user: null, items: [], loading: false, error: '', busy: false },
+  onShow() { if(this.getTabBar)this.getTabBar()?.refresh(); this.setData({ user: wx.getStorageSync('user') || null }); if (wx.getStorageSync('token')) this.load(); else this.setData({ items: [] }); },
   onPullDownRefresh() { this.load().finally(() => wx.stopPullDownRefresh()); },
+  showPublished() { this.setData({ viewingPublished: true }); },
+  favorites() { wx.navigateTo({url:'/pages/favorites/favorites'}); },
   login() { wx.navigateTo({ url: '/pages/login/login' }); },
   async load() { if (!wx.getStorageSync('token')) return; this.setData({ loading: true, error: '' }); try { const data = await api.request('/mine'); this.setData({ items: data.items.map(api.product) }); } catch (error) { this.setData({ error: error.message, user: wx.getStorageSync('user') || null }); api.error(error); } finally { this.setData({ loading: false }); } },
   publish() { if (api.ensureLogin()) wx.navigateTo({ url: '/pages/publish/publish' }); },

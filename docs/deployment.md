@@ -53,3 +53,9 @@ docker compose exec market node scripts/backup.js
 - 人工审核、举报处理、账号数据删除请求目前需要运营者介入。
 - 未绑定商品的上传文件暂不自动清理；监控磁盘并在后续加入保留期清理任务。
 - 未来收费置顶需另行核实主体、支付准入及 iOS 相关规则，不包含在当前发布包中。
+
+## 盒闲 UI 更新部署注意
+
+2026-09-17 UI 迁移无数据库结构变更。部署时完整更新 web/、server/ 和依赖文件，重新构建镜像；微信端需要重新导入/编译 miniprogram，包含新增 custom-tab-bar、assets、lost 和 messages 页面。浏览器入口为 `/`，不要将 `web/demo.html` 当成生产入口。样式文件 heji-reference.css、heji.css 必须随 index.html 一起上传。
+
+Git push 不会自动部署 ECS 或发布小程序。发布后应复验登录、发布审核、实时搜索、图片、收藏与联系权限。技术配置和接口清单见 technical-design.md、api.md。

@@ -1,58 +1,49 @@
-# 青集 · 校园闲置
+# 盒闲 · 校园闲置
 
-单校校园闲置信息发布平台：免费发布、分类搜索、收藏，双方自行联系线下交易。价格直接展示卖家填写的单价，无 5% 加价、无支付、无佣金。
+单校闲置信息发布平台，免费发布、人工审核、分类搜索、收藏与线下联系。当前 UI 根据 `盒闲-手机版UI (3).html` 接入浏览器业务前台，并同步微信原生小程序。无在线订单、付款、佣金或付费置顶。
 
-## 在线演示（无需安装）
-- 合集演示站：<https://chickenboom652-ui.github.io/ershoujiaoyi/>（集市前台、审核后台、使用须知）
-- 单文件版：[web/demo.html](web/demo.html) —— 一个 HTML 文件包含全部界面与演示数据，双击即可离线打开；也可访问 <https://chickenboom652-ui.github.io/ershoujiaoyi/demo.html>
+## 本机运行
 
-两者都是纯前端演示：界面与真实版本一致，但数据来自内置演示种子并保存在浏览器 localStorage（发布、收藏、审核结果只存在本机，刷新仍在，可点顶栏「重置演示数据」还原）。管理员演示密码 `demo-admin-2026`。需要真实后端（SQLite、图片压缩、微信登录）请按下文本机启动或部署章节运行 `server/`。
+需要 Node.js 24。
 
-## 已实现
-- 原生微信小程序：首页、发布/编辑、详情、我的发布、我的收藏、登录、使用须知。
-- 商品多图上传、名称、简介、分类、数量、价格、自取/送达；自取地点必填。
-- 微信服务端登录、本机双账号演示登录、会话管理与所有权校验。
-- 管理员审核、驳回、下架、举报处理，修改商品后重新审核。
-- 真实 SQLite 持久化、图片验证压缩、隐藏非公开商品/联系方式。
-- 响应式浏览器预览与管理员后台，复用同一 API。
-
-## 本机启动（Node.js 24）
 ```powershell
-npm.cmd ci
-npm.cmd run dev
-```
-打开 http://127.0.0.1:3000 。前台登录可选“小林同学/小陈同学”，方便两角色体验。
-
-管理员地址：http://127.0.0.1:3000/admin.html
-
-**仅本机演示密码：`demo-admin-2026`**。正式环境必须单独配置密码，禁止部署演示模式到公网。初始商品均为虚构演示数据，演示库与正式库分离。
-
-体验：小林登录→发布商品→管理员通过→小陈搜索、收藏、查看联系方式→小林标记已售。照片至少 1 张，简介与自取地点必填。
-
-## 微信开发者工具
-导入 `miniprogram` 文件夹，替换 `project.config.json` 的 touristappid 为真实 AppID。`config.js` 默认指向本机，开发工具可按开发需要关闭本地合法域名校验；真机与正式上线必须使用已配置的 HTTPS 服务。微信登录需服务器配置真实 AppID/AppSecret。目前没有执行微信真机验收，不能把浏览器测试当成微信审核通过。
-
-## 项目目录
-```
-server/        Express API、SQLite、演示种子
-web/           浏览器前台、管理员后台、单文件演示 demo.html
-miniprogram/   原生微信小程序
-tests/         API 和小程序逻辑测试、浏览器端到端测试
-scripts/       验证与备份工具
-deploy/        Nginx 模板
-docs/          产品设计和部署说明
+npm ci
+npm run dev
 ```
 
-## 验证
+前台：http://127.0.0.1:3000；审核后台：http://127.0.0.1:3000/admin.html。
+本机演示管理员密码 `demo-admin-2026`。前台可选小林/小陈演示身份，接口、图片与数据库是真实实现，demo 只监听本机，禁止公网部署。
+
+流程：中央“闲置”登录发布 → 在“我的 / 我发布的”查看待审核 → 后台通过 → 首页和顶部搜索可见 → 收藏、登录查看联系方式 → 线下成交后标记已售。
+
+## 新 UI 与功能边界
+
+- 盒闲品牌、绿色视觉、顶部展开式即时搜索、5 秒轮播、双列商品卡片、价格数字统一。
+- 底部：首页 / 失物 / 圆形闲置发布 / 消息 / 我的；上传框内最多六张照片，追加、删除与末尾加号。
+- “我的”含我想要的、我发布的、我的收藏；真实数据通过 API 保存，刷新保留。
+- 失物和消息保留页面入口，明确提示尚未开放。站内聊天和交易反馈后台没有实现；联系卖家仍使用真实联系方式接口。
+- 发布、编辑必须审核通过才公开；静态原型的即时公开行为不用于业务版。
+- 微信开发者工具编译、真机、真实微信登录和提审尚未验收。
+
+## 静态预览与部署区别
+
+`web/demo.html` 是可双击打开的独立 UI 原型，与 `docs/prototypes/heji-mobile.html` 同步，数据仅本页演示、刷新清空；它不连接 API，不适合真实用户交易。Express 业务入口请用 `/`；独立 HTML 应离线打开或用静态服务器查看，其内联脚本不适用于业务服务的严格 CSP。
+
+此前的 GitHub Pages 演示地址不代表本次已部署。GitHub 仓库 push 只上传源文件；Pages 不能运行 Express/SQLite。真实服务需部署后端、持久化数据与 HTTPS。旧 README 所述 localStorage 单文件模拟后台已由本次独立 UI 预览替换。
+
+## 文档与目录
+
+- [技术栈与架构](docs/technical-design.md)：版本、页面映射、数据结构、文件职责。
+- [API 接口](docs/api.md)：参数、鉴权、响应、校验及状态规则。
+- [产品设计](docs/product-design.md)、[部署说明](docs/deployment.md)、[验证记录](docs/validation.md)。
+- `web/`：浏览器前台、后台和样式；`miniprogram/`：原生微信客户端；`server/`：Express/SQLite；`tests/`：自动化测试。
+
+## 验证与微信导入
+
 ```powershell
-npm.cmd run check
-# 安装 Playwright Chromium，或使用本机 Edge：
+npm run check
 $env:PLAYWRIGHT_CHANNEL = 'msedge'
-npm.cmd run test:e2e
+npm run test:e2e
 ```
-不指定 channel 时需先执行 `npx playwright install chromium`。端到端测试自动启动独立 3107 端口与 data/e2e 数据库，不修改日常演示库。
 
-## 部署
-见 [部署说明](docs/deployment.md) 和 [产品设计](docs/product-design.md)。提供 Docker Compose、Nginx 模板与备份脚本；未代购服务器、未部署公网、未提交微信审核。正式运行前核实主体类目、完成备案，补齐真实隐私说明和人工审核流程。
-
-当前媒体使用本地持久化磁盘，尚未接入 OSS；没有自动学生身份核验。学校名称可在环境变量 SCHOOL_NAME 中设置。
+E2E 使用独立 3107 端口及 data/e2e 数据库。导入 `miniprogram` 到微信开发者工具，替换 touristappid；修改 config.js 的 API_BASE 为实际后端 HTTPS 地址。AppSecret 只放服务端环境变量。生产关闭演示登录；使用 `.env.example` 配置，按部署文档完成域名、微信及云端验证。
